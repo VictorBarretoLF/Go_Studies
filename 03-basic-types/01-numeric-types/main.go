@@ -19,5 +19,5 @@ func main() {
 	var myFloat32 float32 = 4.5
 	var myFloat = 9.12 // // Type inferred as `float64` (the default type for floating-point numbers)
 
-	fmt.Printf("%d, %d, %d, %#x, %#o %f %.2f\n", myInt8, myInt, myUint, myHexNumber, myOctalNumber, myFloat32, myFloat) // 97, 1200, 500, 0xff, 034 4.500000 9.12
+	fmt.Printf("%d, %d, %d, %#x, %#o %f %f\n", myInt8, myInt, myUint, myHexNumber, myOctalNumber, myFloat32, myFloat)
 }

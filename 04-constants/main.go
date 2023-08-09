@@ -19,5 +19,5 @@ func main() {
 	const typedInt int = 1234
 	const typedStr string = "Hi"
 
-	fmt.Println(myFavLanguage, sunRisesInTheEast, country, code, employeeId, salary, typedInt, typedStr) // Python true India 91 E101 50000 1234 Hi
+	fmt.Println(myFavLanguage, sunRisesInTheEast, country, code, employeeId, salary, typedInt, typedStr)
 }

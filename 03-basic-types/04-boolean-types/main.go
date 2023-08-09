@@ -13,5 +13,5 @@ func main() {
 	var res1 = 10 > 20 && 5 == 5     // Second operand is not evaluated since first evaluates to false
 	var res2 = 2*2 == 4 || 10%3 == 0 // Second operand is not evaluated since first evaluates to true
 
-	fmt.Println(myBoolean, anotherBoolean, truth, falsehood, res1, res2) // true false true false false true
+	fmt.Println(myBoolean, anotherBoolean, truth, falsehood, res1, res2)
 }
