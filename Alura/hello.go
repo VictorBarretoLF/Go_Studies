@@ -6,12 +6,13 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
 
 const monitoramentos = 3
-const delay = 5
+const delay = 50
 
 func main() {
 
@@ -24,6 +25,7 @@ func main() {
 		iniciarMonitoramento()
 	case 2:
 		fmt.Println("Exibindo Logs...")
+		imprimeLogs()
 	case 0:
 		fmt.Println("Saindo do programa...")
 		os.Exit(0)
@@ -78,7 +80,11 @@ func testaSite(site string) {
 
 	if err != nil {
 		fmt.Println("Ocorreu um erro :", err)
+		registraLog(site, false)
+		return
 	}
+
+	defer resp.Body.Close()
 
 	if resp.StatusCode == 200 {
 		fmt.Println("Site:", site, "foi carregado com sucesso!")
@@ -116,11 +122,26 @@ func leSitesDoArquivo() []string {
 }
 
 func registraLog(site string, status bool) {
-	arquivo, err := os.OpenFile("log.txt", os.O_CREATE|os.O_RDWR, 0666)
+
+	arquivo, err := os.OpenFile("log.txt", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 
 	if err != nil {
 		fmt.Println("Ocorreu um erro:", err)
 	}
 
-	fmt.Println(arquivo)
+	arquivo.WriteString(time.Now().Format("02/01/2006 15:04:05") + " - " + site +
+		" - online: " + strconv.FormatBool(status) + "\n")
+
+	arquivo.Close()
+}
+
+func imprimeLogs() {
+
+	arquivo, err := os.ReadFile("log.txt")
+
+	if err != nil {
+		fmt.Println("Ocorreu um erro:", err)
+	}
+
+	fmt.Println(string(arquivo))
 }
