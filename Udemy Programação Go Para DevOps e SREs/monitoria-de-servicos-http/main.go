@@ -1,13 +1,34 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"net/http"
 	"os"
 	"time"
 )
 
+type Server struct {
+	ServerName    string
+	ServerURL     string
+	TempoExecucao float64
+}
+
 func main() {
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer file.Close()
+
+	csvReader := csv.NewReader(file)
+	data, err := csvReader.ReadAll()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 	agora := time.Now()
 	url := os.Args[1]
 
