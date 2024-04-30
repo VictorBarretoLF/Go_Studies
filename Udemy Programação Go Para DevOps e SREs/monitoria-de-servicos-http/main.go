@@ -29,6 +29,8 @@ func main() {
 		os.Exit(1)
 	}
 
+	fmt.Println(data)
+
 	agora := time.Now()
 	url := os.Args[1]
 
