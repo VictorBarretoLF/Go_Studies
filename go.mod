@@ -1,6 +1,6 @@
 module myapp
 
-go 1.23
+go 1.22.0
 
 require (
 	github.com/abbot/go-http-auth v0.4.0 // indirect

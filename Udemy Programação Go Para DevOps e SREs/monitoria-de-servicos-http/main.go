@@ -11,7 +11,40 @@ import (
 type Server struct {
 	ServerName    string
 	ServerURL     string
-	TempoExecucao float64
+	tempoExecucao float64
+	status        int
+}
+
+func criarListaServidores(data [][]string) []Server {
+	var servidores []Server
+
+	for i, line := range data {
+		if i > 0 {
+			servidor := Server{
+				ServerName: line[0],
+				ServerURL:  line[1],
+			}
+			servidores = append(servidores, servidor)
+		}
+	}
+
+	return servidores
+}
+
+func checkServers(servidores []Server) {
+	for _, servidor := range servidores {
+		agora := time.Now()
+		resp, err := http.Get(servidor.ServerURL)
+		if err != nil {
+			fmt.Println(err)
+		}
+		servidor.status = resp.StatusCode
+		servidor.tempoExecucao = time.Since(agora).Seconds()
+
+		fmt.Printf("Status: [%d] Tempo de carga: [%f] Server: [%s]\n", servidor.status, servidor.tempoExecucao, servidor.ServerURL)
+
+		defer resp.Body.Close()
+	}
 }
 
 func main() {
@@ -29,18 +62,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(data)
+	servidores := criarListaServidores(data)
+	checkServers(servidores)
 
-	agora := time.Now()
-	url := os.Args[1]
-
-	get, err := http.Get(url)
-	if err != nil {
-		fmt.Println("Ocorreu um erro ao executar o get(url)")
-		panic(err)
-	}
-
-	decorrido := time.Since(agora).Seconds()
-	status := get.StatusCode
-	fmt.Printf("Status: [%d] Tempo de carga: [%f]\n", status, decorrido)
 }
