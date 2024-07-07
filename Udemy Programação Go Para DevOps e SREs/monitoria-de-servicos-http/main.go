@@ -16,6 +16,11 @@ type Server struct {
 	dataFalha     string
 }
 
+const (
+	LISTA_SERVIDORES_CSV_LOCALIZACAO          = "lista-servidores.csv"
+	LISTA_SERVIDORES_DOWNTIME_CSV_LOCALIZACAO = "lista-servidores-downtime.csv"
+)
+
 func criarListaServidores(serverList *os.File) []Server {
 	csvReader := csv.NewReader(serverList)
 	data, err := csvReader.ReadAll()
@@ -45,9 +50,9 @@ func checkServers(servidores []Server) []Server {
 	for _, servidor := range servidores {
 		agora := time.Now()
 		resp, err := http.Get(servidor.ServerURL)
-		
+
 		if err != nil {
-			fmt.Printf("Server %s is down\n", servidor.ServerName, err.Error())
+			fmt.Printf("Server %s is down %s\n", servidor.ServerName, err.Error())
 			servidor.status = 0
 			servidor.dataFalha = agora.Format("02/01/2006 15:20:30")
 			downServers = append(downServers, servidor)
@@ -69,11 +74,6 @@ func checkServers(servidores []Server) []Server {
 	return downServers
 }
 
-const (
-	LISTA_SERVIDORES_CSV_LOCALIZACAO          = "lista-servidores.csv"
-	LISTA_SERVIDORES_DOWNTIME_CSV_LOCALIZACAO = "lista-servidores-downtime.csv"
-)
-
 func openFiles(serverListFile string, downTimeFile string) (*os.File, *os.File) {
 	serverList, err := os.OpenFile(serverListFile, os.O_RDONLY, 0666)
 	if err != nil {
@@ -81,13 +81,22 @@ func openFiles(serverListFile string, downTimeFile string) (*os.File, *os.File) 
 		os.Exit(1)
 	}
 
-	downTimeList, err := os.OpenFile(downTimeFile, os.O_APPEND|os.O_CREATE, 0666)
+	downTimeList, err := os.OpenFile(downTimeFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	return serverList, downTimeList
+}
+
+func generateDowntime(downTimeList *os.File, downServers []Server) {
+	csvWriter := csv.NewWriter(downTimeList)
+	for _, servidor := range downServers {
+		line := []string{servidor.ServerName, servidor.ServerURL, servidor.dataFalha, fmt.Sprintf("f", servidor.tempoExecucao), fmt.Sprintf("d", servidor.status)}
+		csvWriter.Write(line)
+	}
+	csvWriter.Flush()
 }
 
 func main() {
@@ -97,6 +106,6 @@ func main() {
 	defer downTimeList.Close()
 
 	servidores := criarListaServidores(serverList)
-
 	downServers := checkServers(servidores)
+	generateDowntime(downTimeList, downServers)
 }
