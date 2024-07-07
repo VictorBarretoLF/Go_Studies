@@ -45,6 +45,7 @@ func checkServers(servidores []Server) []Server {
 	for _, servidor := range servidores {
 		agora := time.Now()
 		resp, err := http.Get(servidor.ServerURL)
+		
 		if err != nil {
 			fmt.Printf("Server %s is down\n", servidor.ServerName, err.Error())
 			servidor.status = 0
