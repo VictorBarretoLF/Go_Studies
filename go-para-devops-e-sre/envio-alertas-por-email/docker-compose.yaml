@@ -8,3 +8,16 @@ services:
       - "9000:9000"
     volumes:
       - .:/go/src/
+
+  db:
+    image: postgres:15-alpine
+    container_name: dcs-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data

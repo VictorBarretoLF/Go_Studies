@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: sqlc
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/go/src/
+    networks:
+      - mynetwork
+
+  mysql: 
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: courses
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
