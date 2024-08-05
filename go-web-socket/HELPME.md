@@ -95,10 +95,8 @@ tern new --migrations ./internal/store/pgstore/migrations create_messages_table
 Para aplicar migrações ao banco de dados, use:
 
 ```bash
-tern migrate -m ./migrations
+go run cmd/tools/terndotenv/main.go
 ```
-
-Certifique-se de que o diretório `./migrations` contém os arquivos de migração SQL.
 
 #### Caso o banco de dados não tenha sido criado, executar os seguintes passos
 
@@ -130,6 +128,12 @@ Listar os nomes dos bancos de dados
 
 ```bash
 SELECT datname FROM pg_database;
+```
+
+### Gerando Arquivos SQLC
+
+```bash
+sqlc generate -f ./internal/store/pgstore/sqlc.yaml 
 ```
 
 ## Exemplo Completo
