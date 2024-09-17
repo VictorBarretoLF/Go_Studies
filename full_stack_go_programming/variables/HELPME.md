@@ -1,0 +1,20 @@
+```bash
+    docker exec -it <app-name> bash
+```
+
+```bash
+    docker-compose build --no-cache
+```
+
+Tidy Your Module
+Run the go mod tidy command to clean up the module dependencies, ensuring that all necessary dependencies are properly noted and unused ones are removed:
+
+https://github1s.com/gracyaneoliveira/fullcycle-arquitetura-hexagonal/blob/HEAD/application/product.go
+
+```bash
+    go mod tidy
+```
+
+```bash
+    go test ./...
+```
