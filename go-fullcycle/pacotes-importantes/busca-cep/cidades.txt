@@ -1,0 +1,13 @@
+CEP: 01001-000
+Logradouro: Praça da Sé
+Complemento: lado ímpar
+Unidade: 
+Bairro: Sé
+Localidade: São Paulo
+UF: SP
+Estado: São Paulo
+Regiao: Sudeste
+IBGE: 3550308
+GIA: 1004
+DDD: 11
+SIAFI: 7107
